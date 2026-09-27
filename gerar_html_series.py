@@ -63,6 +63,27 @@ body {
     text-overflow: ellipsis;
 }
 
+/* Botão de voltar ao index (no painel) */
+.btn-voltar-index {
+    display: block;
+    width: 100%;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 15px;
+    transition: background 0.2s;
+}
+.btn-voltar-index:hover {
+    background: var(--border-color);
+    color: var(--accent-hover);
+}
+
 /* Botão para alternar Painel Lateral */
 #toggleSidebarBtn {
     position: fixed;
@@ -681,6 +702,10 @@ def processar_serie(pasta_serie):
 
     print(f"\n📂 Processando série: {pasta_serie_abs.name} ({len(episodios)} episódios)")
 
+    # Verifica se o index.html existe no diretório pai (BASE_DIR)
+    existe_index_raiz = (BASE_DIR / "index.html").exists()
+    botao_voltar_html = '<a href="../index.html" class="btn-voltar-index">← Voltar ao Início</a>' if existe_index_raiz else ''
+
     indice_items = []
     capitulos_html = []
 
@@ -738,6 +763,7 @@ def processar_serie(pasta_serie):
     <button id="toggleSidebarBtn" onclick="toggleSidebar()">✕ Fechar</button>
 
     <div class="sidebar" id="sidebar">
+        {botao_voltar_html}
         <div class="painel-controles">
             <h3>Opções</h3>
             <div class="botoes-grid">
@@ -757,7 +783,6 @@ def processar_serie(pasta_serie):
         {"".join(capitulos_html)}
     </div>
 
-    <!-- Modal para exibição dos comentários -->
     <div class="modal-overlay" id="modalComentarios" onclick="if(event.target === this) fecharModalComentarios()">
         <div class="modal-conteudo">
             <div class="modal-header">
@@ -768,7 +793,6 @@ def processar_serie(pasta_serie):
         </div>
     </div>
 
-    <!-- Barra Navegação Inferior -->
     <div class="mobile-nav-bar">
         <button class="mobile-nav-btn" id="mobileBtnPrev" onclick="capAnterior()">◀ Anterior</button>
         <button class="mobile-nav-btn" id="mobileBtnComms" onclick="abrirModalComentarios()">💬 Comentários</button>
